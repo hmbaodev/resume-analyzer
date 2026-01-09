@@ -19,7 +19,7 @@ export function meta({}: Route.MetaArgs) {
   return [{ title: "Resumind | Sign In to Your Account" }];
 }
 
-export default function SignIn() {
+export default function Login() {
   const form = useForm<z.infer<typeof signInFormValidator>>({
     resolver: zodResolver(signInFormValidator),
     defaultValues: {

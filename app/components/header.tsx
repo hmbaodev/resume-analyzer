@@ -9,7 +9,7 @@ const Header = () => {
         <Logo />
         <div className="flex items-center gap-2">
           <Button variant="outline" className="cursor-pointer" asChild>
-            <Link to="/sign-in">Sign In</Link>
+            <Link to="/Login">Login</Link>
           </Button>
         </div>
       </div>
