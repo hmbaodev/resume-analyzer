@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
@@ -25,7 +26,15 @@ const signUp = async (name: string, email: string, password: string) => {
 };
 
 // TODO: Sign In Service
-const login = async (email: string, password: string) => {};
+const login = async (email: string, password: string) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.log("Error logging in:", error);
+    throw error;
+  }
+};
 
 // TODO: Sign Out Service
 const logout = async () => {};

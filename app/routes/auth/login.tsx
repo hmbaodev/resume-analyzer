@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import type { Route } from "./+types/sign-in";
 import type z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { twMerge } from "tailwind-merge";
 
+import type { Route } from "./+types/login";
 import { signInFormValidator } from "validators";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,12 +18,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { login } from "@/services/auth";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Resumind | Sign In to Your Account" }];
 }
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const form = useForm<z.infer<typeof signInFormValidator>>({
     resolver: zodResolver(signInFormValidator),
     defaultValues: {
@@ -28,8 +37,39 @@ export default function Login() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signInFormValidator>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof signInFormValidator>) => {
+    setIsButtonDisabled(true);
+    setIsLoading(true);
+
+    const { email, password } = values;
+
+    try {
+      await login(email, password);
+      toast.success("Logged in successfully!")
+      navigate("/")
+    } catch (error: any) {
+      // Handling different Firebase Auth error codes
+      switch (error.code) {
+        case "auth/user-not-found":
+          toast.error("No account found with this email.");
+          form.setError("email", {
+            message: "No account found with this email.",
+          });
+          break;
+        case "auth/wrong-password":
+          toast.error("Incorrect password. Please try again.");
+          form.setError("password", {
+            message: "Incorrect password. Please try again.",
+          });
+          break;
+        default:
+          toast.error("An unexpected error occurred. Please try again later.");
+          break;
+      }
+    } finally {
+      setIsButtonDisabled(false);
+      setIsLoading(false);
+    }
   };
 
   return (

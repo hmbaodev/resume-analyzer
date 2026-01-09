@@ -10,5 +10,6 @@ export default [
     index("./routes/home.tsx"),
     route("login", "routes/auth/login.tsx"),
     route("sign-up", "routes/auth/sign-up.tsx"),
+    route("forgot-password", "routes/auth/forgot-password.tsx")
   ]),
 ] satisfies RouteConfig;

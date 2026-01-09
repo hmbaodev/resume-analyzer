@@ -4,6 +4,8 @@ import type z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { twMerge } from "tailwind-merge";
 
 import type { Route } from "./+types/sign-up";
 import { signUpFormValidator } from "validators";
@@ -17,8 +19,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { signUp } from "@/services/auth";
-import { toast } from "sonner";
-import { twMerge } from "tailwind-merge";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Resumind | Sign Up Your Account" }];
@@ -43,8 +43,10 @@ export default function SignUp() {
     setIsLoading(true);
     setIsButtonDisabled(true);
 
+    const { name, email, password } = values;
+
     try {
-      await signUp(values.name, values.email, values.password);
+      await signUp(name, email, password);
       toast.success("Account created successfully!");
       navigate("/login");
     } catch (error: any) {
