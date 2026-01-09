@@ -127,9 +127,20 @@ export default function Login() {
             <Button
               size={"lg"}
               type="submit"
-              className="bg-blue-600 hover:bg-blue-600/85 cursor-pointer"
+              className={twMerge(
+                "bg-blue-600 hover:bg-blue-600/85 cursor-pointer",
+                isLoading && "flex items-center gap-2"
+              )}
+              disabled={isButtonDisabled}
             >
-              Sign In
+              {isLoading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Signing In...</span>
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
             <p className="text-center">
               Do not have an account yet?{" "}

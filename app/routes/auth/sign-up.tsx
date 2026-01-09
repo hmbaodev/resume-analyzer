@@ -175,7 +175,7 @@ export default function SignUp() {
               {isLoading ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />
-                  <span>Signing up...</span>
+                  <span>Signing Up...</span>
                 </>
               ) : (
                 "Sign Up"
