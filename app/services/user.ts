@@ -1,0 +1,3 @@
+const hello = () => {};
+
+export { hello };

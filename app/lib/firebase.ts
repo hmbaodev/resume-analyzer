@@ -19,7 +19,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
+// Analytics just runs when in browser environment
+const analytics =
+  app.name && typeof window !== "undefined" ? getAnalytics(app) : null;
 
 export { analytics, auth };

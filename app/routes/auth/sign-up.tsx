@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import type { Route } from "./+types/sign-up";
 import type z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { Loader2 } from "lucide-react";
 
+import type { Route } from "./+types/sign-up";
 import { signUpFormValidator } from "validators";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,12 +16,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { signUp } from "@/services/auth";
+import { toast } from "sonner";
+import { twMerge } from "tailwind-merge";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Resumind | Sign Up Your Account" }];
 }
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof signUpFormValidator>>({
     resolver: zodResolver(signUpFormValidator),
     defaultValues: {
@@ -30,8 +39,49 @@ export default function SignUp() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signUpFormValidator>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof signUpFormValidator>) => {
+    setIsLoading(true);
+    setIsButtonDisabled(true);
+
+    try {
+      await signUp(values.name, values.email, values.password);
+      toast.success("Account created successfully!");
+      navigate("/login");
+    } catch (error: any) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          toast.error("This email is already registered.");
+          form.setError("email", {
+            message: "This email is already registered.",
+          });
+          break;
+
+        case "auth/invalid-email":
+          toast.error("The email address is not valid.");
+          form.setError("email", {
+            message: "Please enter a valid email address.",
+          });
+          break;
+
+        case "auth/weak-password":
+          toast.error("The password is too weak.");
+          form.setError("password", {
+            message: "Password should be at least 6 characters.",
+          });
+          break;
+
+        default:
+          toast.error("An unexpected error occurred. Please try again.");
+          form.setError("root", {
+            message: "Server error. Please try again later.",
+          });
+          break;
+      }
+    } finally {
+      // This runs regardless of success or failure
+      setIsLoading(false);
+      setIsButtonDisabled(false);
+    }
   };
 
   return (
@@ -114,9 +164,20 @@ export default function SignUp() {
             <Button
               size={"lg"}
               type="submit"
-              className="bg-blue-600 hover:bg-blue-600/85 cursor-pointer"
+              className={twMerge(
+                "bg-blue-600 hover:bg-blue-600/85 cursor-pointer",
+                isLoading && "flex items-center gap-2"
+              )}
+              disabled={isButtonDisabled}
             >
-              Sign Up
+              {isLoading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Signing up...</span>
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
             <p className="text-center">
               Already have an account?{" "}
