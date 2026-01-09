@@ -50,16 +50,10 @@ export default function Login() {
     } catch (error: any) {
       // Handling different Firebase Auth error codes
       switch (error.code) {
-        case "auth/user-not-found":
-          toast.error("No account found with this email.");
+        case "auth/invalid-credential":
+          toast.error("Wrong email or password.");
           form.setError("email", {
-            message: "No account found with this email.",
-          });
-          break;
-        case "auth/wrong-password":
-          toast.error("Incorrect password. Please try again.");
-          form.setError("password", {
-            message: "Incorrect password. Please try again.",
+            message: "Wrong email or password.",
           });
           break;
         default:
