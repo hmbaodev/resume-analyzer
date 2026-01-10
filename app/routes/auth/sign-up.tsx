@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import type z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
@@ -30,6 +30,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof signUpFormValidator>>({
     resolver: zodResolver(signUpFormValidator),
@@ -139,12 +140,25 @@ export default function SignUp() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      className="h-10"
-                      type="password"
-                      placeholder="Your password..."
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        className="h-10 pr-10"
+                        type={showPassword ? "text" : "password"} // Controlled by single state
+                        placeholder="Your password..."
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-4" />
+                        ) : (
+                          <Eye className="size-4" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,17 +170,46 @@ export default function SignUp() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      className="h-10"
-                      type="password"
-                      placeholder="Confirm your password..."
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        className="h-10 pr-10"
+                        type={showPassword ? "text" : "password"} // Uses same state as primary password
+                        placeholder="Confirm your password..."
+                        {...field}
+                      />
+                      {/* Optional: You can remove this icon if you want only one toggle to control both */}
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-4" />
+                        ) : (
+                          <Eye className="size-4" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="show-password"
+                className="size-4 cursor-pointer"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)} // Syncs with state
+              />
+              <label
+                htmlFor="show-password"
+                className="text-sm cursor-pointer select-none"
+              >
+                Show password
+              </label>
+            </div>
             <Button
               size={"lg"}
               type="submit"
@@ -187,10 +230,7 @@ export default function SignUp() {
             </Button>
             <p className="text-center">
               Already have an account?{" "}
-              <Link
-                className="link-primary"
-                to="/login"
-              >
+              <Link className="link-primary" to="/login">
                 Sign in
               </Link>
             </p>

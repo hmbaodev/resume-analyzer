@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import type z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
@@ -30,6 +30,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof signInFormValidator>>({
     resolver: zodResolver(signInFormValidator),
@@ -104,26 +105,48 @@ export default function Login() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      className="h-10"
-                      type="password"
-                      placeholder="Your password..."
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        className="h-10 pr-10" // Add padding for the icon
+                        type={showPassword ? "text" : "password"} // 2. Toggle type
+                        placeholder="Your password..."
+                        {...field}
+                      />
+                      {/* 3. Add toggle button inside the input */}
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-4" />
+                        ) : (
+                          <Eye className="size-4" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input type="checkbox" id="show-password" className="mr-2" />
-                <label htmlFor="show-password">Show password</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="show-password"
+                  className="size-4 cursor-pointer"
+                  checked={showPassword}
+                  onChange={(e) => setShowPassword(e.target.checked)}
+                />
+                <label
+                  htmlFor="show-password"
+                  className="text-sm cursor-pointer select-none"
+                >
+                  Show password
+                </label>
               </div>
-              <Link
-                to="/forgot-password"
-                className="link-primary"
-              >
+              <Link to="/forgot-password" className="link-primary">
                 Forgot password?
               </Link>
             </div>
@@ -147,10 +170,7 @@ export default function Login() {
             </Button>
             <p className="text-center">
               Do not have an account yet?{" "}
-              <Link
-                className="link-primary"
-                to="/sign-up"
-              >
+              <Link className="link-primary" to="/sign-up">
                 Sign up
               </Link>
             </p>
