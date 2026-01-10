@@ -93,7 +93,7 @@ const ForgotPassword = () => {
               size={"lg"}
               type="submit"
               className={twMerge(
-                "bg-blue-600 hover:bg-blue-600/85 cursor-pointer",
+                "bg-blue-600 hover:bg-blue-700 cursor-pointer",
                 isLoading && "flex items-center gap-2"
               )}
               disabled={isButtonDisabled}

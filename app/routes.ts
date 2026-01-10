@@ -24,7 +24,7 @@ export default [
     // Protected Routes (Require Login)
     layout("./layouts/protected-layout.tsx", [
       index("./routes/home.tsx"),
-      // Add other protected routes here like "dashboard", "settings", etc.
+      route("upload", "routes/upload.tsx")
     ]),
   ]),
 ] satisfies RouteConfig;

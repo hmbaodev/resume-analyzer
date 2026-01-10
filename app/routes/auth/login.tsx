@@ -77,11 +77,16 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center h-[calc(100vh-36px-24px)] px-4">
-      <div className="w-full max-w-lg space-y-8 border shadow-md p-8 rounded-md">
-        <h1 className="text-2xl font-bold text-center">
+    <div className="flex flex-col items-center justify-center h-[calc(100vh-36px-24px)] px-4 gap-4">
+      <div>
+        <h1 className="text-2xl font-bold text-center mb-2">
           Sign In to Your Account
         </h1>
+        <p className="text-base">
+          Login to continue your job application journey
+        </p>
+      </div>
+      <div className="w-full max-w-lg space-y-8 border shadow-md p-8 rounded-md">
         <GoogleButton text="Sign In with Google" />
         <AuthFormDivider />
         <Form {...form}>
@@ -161,7 +166,7 @@ export default function Login() {
               size={"lg"}
               type="submit"
               className={twMerge(
-                "bg-blue-600 hover:bg-blue-600/85 cursor-pointer",
+                "bg-blue-600 hover:bg-blue-700 cursor-pointer",
                 isLoading && "flex items-center gap-2"
               )}
               disabled={isButtonDisabled}
