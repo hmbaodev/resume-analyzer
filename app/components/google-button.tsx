@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 import { Button } from "./ui/button";
 import { loginWithGoogle } from "@/services/auth";
-import { toast } from "sonner";
 
 const GoogleButton = ({
   text,
@@ -23,10 +23,8 @@ const GoogleButton = ({
       toast.success("Successfully signed in with Google!");
       navigate("/");
     } catch (error: any) {
-      // popular error codes
       switch (error.code) {
         case "auth/popup-closed-by-user":
-          // The user simply closed the window. Silently reset.
           toast.error("Sign in popup closed before completion.");
           break;
         case "auth/popup-blocked":

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 import type { Route } from "./+types/sign-up";
-import { signUpFormValidator } from "validators";
+import { signUpFormValidator } from "@/validators";
 import { Button } from "@/components/ui/button";
 import {
   Form,

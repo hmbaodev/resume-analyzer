@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 import type { Route } from "./+types/forgot-password";
-import { forgotPasswordFormValidator } from "validators";
+import { forgotPasswordFormValidator } from "@/validators";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -42,7 +42,9 @@ const ForgotPassword = () => {
 
     try {
       await resetPassword(email);
-      toast.success("Reset password email sent! Please check your inbox/spam and sign in again.");
+      toast.success(
+        "Reset password email sent! Please check your inbox/spam and sign in again."
+      );
     } catch (error: any) {
       switch (error.code) {
         case "auth/user-not-found":
@@ -56,7 +58,6 @@ const ForgotPassword = () => {
           break;
       }
     } finally {
-      // This runs regardless of success or failure
       setIsLoading(false);
       setIsButtonDisabled(false);
     }

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -6,9 +7,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import { Toaster } from "@/components/ui/sonner";
+import { onAuthStateChanged } from "firebase/auth";
 
+import { auth } from "@/lib/firebase";
+import { Toaster } from "@/components/ui/sonner";
 import type { Route } from "./+types/root";
+import { useAuthStore } from "@/store/use-auth-store";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -25,6 +29,17 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const setUser = useAuthStore((state) => state.setUser);
+
+  useEffect(() => {
+    // Check if there's a user already signed in or not
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, [setUser]);
+
   return (
     <html lang="en">
       <head>

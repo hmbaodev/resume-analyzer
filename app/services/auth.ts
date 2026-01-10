@@ -7,6 +7,7 @@ import {
   updateProfile,
   sendPasswordResetEmail,
 } from "firebase/auth";
+
 import { auth } from "@/lib/firebase";
 
 // TODO: Sign Up Service

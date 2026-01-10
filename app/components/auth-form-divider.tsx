@@ -8,7 +8,7 @@ const AuthFormDivider = () => {
         <span className="bg-white px-2 text-gray-500">or</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AuthFormDivider
+export default AuthFormDivider;
