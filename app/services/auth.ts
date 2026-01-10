@@ -1,9 +1,11 @@
+import { GoogleAuthProvider } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
@@ -28,7 +30,11 @@ const signUp = async (name: string, email: string, password: string) => {
 // TODO: Sign In Service
 const login = async (email: string, password: string) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     return userCredential.user;
   } catch (error) {
     console.log("Error logging in:", error);
@@ -36,11 +42,37 @@ const login = async (email: string, password: string) => {
   }
 };
 
+// TODO: Login with Google
+const loginWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    return result.user;
+  } catch (error) {
+    console.error("Error logging in with Google:", error);
+    throw error;
+  }
+};
+
 // TODO: Sign Out Service
-const logout = async () => {};
+const logout = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Error signing out:", error);
+    throw error;
+  }
+};
 
 // TODO: Password Reset Service
-const resetPassword = async (email: string) => {};
+const resetPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    throw error;
+  }
+};
 
 // TODO: Update User Profile Service
 const updateUserProfile = async (
@@ -49,4 +81,11 @@ const updateUserProfile = async (
   photoURL: string
 ) => {};
 
-export { signUp, login, logout, resetPassword, updateUserProfile };
+export {
+  signUp,
+  login,
+  logout,
+  resetPassword,
+  updateUserProfile,
+  loginWithGoogle,
+};

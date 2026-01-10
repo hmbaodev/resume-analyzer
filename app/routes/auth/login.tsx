@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { login } from "@/services/auth";
+import GoogleButton from "@/components/google-button";
+import AuthFormDivider from "@/components/auth-form-divider";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Resumind | Sign In to Your Account" }];
@@ -45,8 +47,8 @@ export default function Login() {
 
     try {
       await login(email, password);
-      toast.success("Logged in successfully!")
-      navigate("/")
+      toast.success("Logged in successfully!");
+      navigate("/");
     } catch (error: any) {
       // Handling different Firebase Auth error codes
       switch (error.code) {
@@ -72,6 +74,8 @@ export default function Login() {
         <h1 className="text-2xl font-bold text-center">
           Sign In to Your Account
         </h1>
+        <GoogleButton text="Sign In with Google" />
+        <AuthFormDivider />
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -116,7 +120,12 @@ export default function Login() {
                 <input type="checkbox" id="show-password" className="mr-2" />
                 <label htmlFor="show-password">Show password</label>
               </div>
-              <p>Forgot password?</p>
+              <Link
+                to="/forgot-password"
+                className="link-primary"
+              >
+                Forgot password?
+              </Link>
             </div>
             <Button
               size={"lg"}
@@ -139,7 +148,7 @@ export default function Login() {
             <p className="text-center">
               Do not have an account yet?{" "}
               <Link
-                className="text-blue-600 hover:text-blue-600/85"
+                className="link-primary"
                 to="/sign-up"
               >
                 Sign up

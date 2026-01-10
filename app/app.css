@@ -133,3 +133,7 @@
 .section-padding {
   @apply py-5 md:py-10;
 }
+
+.link-primary {
+  @apply text-blue-600 hover:text-blue-600/85;
+}

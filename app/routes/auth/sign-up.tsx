@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { signUp } from "@/services/auth";
+import GoogleButton from "@/components/google-button";
+import AuthFormDivider from "@/components/auth-form-divider";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Resumind | Sign Up Your Account" }];
@@ -90,6 +92,8 @@ export default function SignUp() {
     <div className="flex items-center justify-center h-[calc(100vh-36px-24px)] px-4">
       <div className="w-full max-w-lg space-y-8 border shadow-md p-8 rounded-md">
         <h1 className="text-2xl font-bold text-center">Sign Up</h1>
+        <GoogleButton text="Continue with Google" />
+        <AuthFormDivider />
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -184,7 +188,7 @@ export default function SignUp() {
             <p className="text-center">
               Already have an account?{" "}
               <Link
-                className="text-blue-600 hover:text-blue-600/85"
+                className="link-primary"
                 to="/login"
               >
                 Sign in
