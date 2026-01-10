@@ -59,7 +59,14 @@ export default function Login() {
             message: "Wrong email or password.",
           });
           break;
+        case "auth/wrong-password":
+          toast.error("Wrong email or password.");
+          form.setError("password", {
+            message: "Wrong password. Try again or Sign in with Google",
+          });
+          break;
         default:
+          console.log(error.code);
           toast.error("An unexpected error occurred. Please try again later.");
           break;
       }
